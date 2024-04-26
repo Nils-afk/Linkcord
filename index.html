@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Widgets</title>
+    <style>
+        .info-box {
+            background-color: #ffcccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        #loadButton {
+            background-color: #4CAF50; /* Grün */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-box">
+        <p>Please note that you need to join our Discord server to use these widgets: <a href="https://discord.gg/VRYSb3sEN3" target="_blank">Join Discord Server</a></p>
+    </div>
+
+    <h1>Discord Widgets</h1>
+    <form id="discordForm">
+        <label for="discordID">Discord User ID:</label><br>
+        <input type="text" id="discordID" name="discordID"><br><br>
+        <button id="loadButton" type="button" onclick="loadWidgets()">Load Widgets</button>
+    </form>
+
+    <div id="widgets"></div>
+
+    <script>
+        function loadWidgets() {
+            var discordID = document.getElementById('discordID').value;
+            var widgetsDiv = document.getElementById('widgets');
+            widgetsDiv.innerHTML = `
+                <div>
+                    <iframe src="https://linkcord.linkgames.de/api/v3/widget/${discordID}?type=spotify_large" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
+                </div>
+                <div>
+                    <iframe src="https://linkcord.linkgames.de/api/v3/widget/${discordID}?type=spotify_small" width="150" height="150" allowtransparency="true" frameborder="0"></iframe>
+                </div>
+                <div>
+                    <iframe src="https://linkcord.linkgames.de/api/v3/widget/${discordID}?type=spotify_mini" width="300" height="60" allowtransparency="true" frameborder="0"></iframe>
+                </div>
+                <div>
+                    <iframe src="https://linkcord.linkgames.de/api/v3/widget/${discordID}?type=vsc" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
+                </div>
+                <div>
+                    <iframe src="https://linkcord.linkgames.de/api/v3/widget/${discordID}?type=status" width="300" height="100" allowtransparency="true" frameborder="0"></iframe>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
