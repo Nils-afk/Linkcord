@@ -28,6 +28,15 @@
         #themeButton {
             background-color: #008CBA;
         }
+
+        #language {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -38,7 +47,15 @@
     <h1>Discord Widgets</h1>
     <form id="discordForm">
         <label for="discordID">Discord User ID:</label><br>
-        <input type="text" id="discordID" name="discordID"><br><br>
+        <input type="text" id="discordID" name="discordID" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 20px;"><br>
+
+        <label for="language">Select Language:</label><br>
+        <select id="language" name="language" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9; margin-bottom: 20px;" onchange="loadWidgets()">
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+            <option value="tr">Türkçe</option>
+        </select><br>
+
         <button id="loadButton" type="button" onclick="loadWidgets()">Load Widgets</button>
         <button id="themeButton" type="button" onclick="toggleTheme()">Switch to Dark Mode</button>
     </form>
@@ -50,23 +67,25 @@
 
         function loadWidgets() {
             var discordID = document.getElementById('discordID').value;
+            var language = document.getElementById('language').value;
             var widgetsDiv = document.getElementById('widgets');
             var theme = isDarkMode ? '&theme=dark' : '';
+            var lang = `&language=${language}`;
             widgetsDiv.innerHTML = `
                 <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_large${theme}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
+                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_large${theme}${lang}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
                 </div>
                 <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_small${theme}" width="150" height="150" allowtransparency="true" frameborder="0"></iframe>
+                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_small${theme}${lang}" width="150" height="150" allowtransparency="true" frameborder="0"></iframe>
                 </div>
                 <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_mini${theme}" width="300" height="60" allowtransparency="true" frameborder="0"></iframe>
+                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_mini${theme}${lang}" width="300" height="60" allowtransparency="true" frameborder="0"></iframe>
                 </div>
                 <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=vsc${theme}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
+                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=vsc${theme}${lang}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
                 </div>
                 <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=status${theme}" width="300" height="100" allowtransparency="true" frameborder="0"></iframe>
+                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=status${theme}${lang}" width="300" height="100" allowtransparency="true" frameborder="0"></iframe>
                 </div>
             `;
         }
