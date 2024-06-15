@@ -100,9 +100,8 @@
 
     <script>
         var isDarkMode = false;
-        var isLoading = true; // Start with true to show loading animation on page load
+        var isLoading = true; 
 
-        // Function to load widgets
         function loadWidgets() {
             var discordID = document.getElementById('discordID').value;
             if (!discordID) {
@@ -119,11 +118,9 @@
             var theme = isDarkMode ? '&theme=dark' : '';
             var lang = `&language=${language}`;
 
-            // Zeige die Ladeanimation
             loadingDiv.style.display = 'block';
             widgetsDiv.style.display = 'none';
 
-            // Simuliere eine kurze Verzögerung zum Laden der Widgets
             setTimeout(function() {
                 widgetsDiv.innerHTML = `
                     <div>
@@ -142,16 +139,14 @@
                         <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=status${theme}${lang}" width="300" height="100" allowtransparency="true" frameborder="0"></iframe>
                     </div>
                 `;
-                // Verstecke die Ladeanimation und zeige die Widgets
                 loadingDiv.style.display = 'none';
                 widgetsDiv.style.display = 'block';
 
                 isLoading = false;
                 updateFormState();
-            }, 2000); // Simulierte Ladezeit von 2 Sekunden
+            }, 2000);
         }
 
-        // Function to toggle theme
         function toggleTheme() {
             if (isLoading) {
                 return;
@@ -163,7 +158,6 @@
             loadWidgets();
         }
 
-        // Function to handle language change
         function handleLanguageChange() {
             if (isLoading) {
                 return;
@@ -171,7 +165,6 @@
             loadWidgets();
         }
 
-        // Function to update form state
         function updateFormState() {
             document.getElementById('discordID').disabled = isLoading;
             document.getElementById('language').disabled = isLoading;
@@ -179,17 +172,15 @@
             document.getElementById('themeButton').disabled = isLoading;
         }
 
-        // Show loading animation on page load
         window.onload = function() {
             var loadingDiv = document.getElementById('loading');
             loadingDiv.style.display = 'block';
 
-            // Simuliere eine kurze Verzögerung zum Laden der Widgets
             setTimeout(function() {
                 loadingDiv.style.display = 'none';
                 isLoading = false;
                 updateFormState();
-            }, 2000); // Simulierte Ladezeit von 2 Sekunden
+            }, 2000);
         }
     </script>
 </body>
