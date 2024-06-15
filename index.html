@@ -6,9 +6,23 @@
     <title>Discord Widgets</title>
     <style>
         .info-box {
-            background-color: #ffcccc;
-            padding: 10px;
+            background-color: #f8d7da;
+            padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid #f5c2c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            color: #721c24;
+        }
+
+        .info-box a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .info-box a:hover {
+            text-decoration: underline;
         }
 
         #loadButton, #themeButton {
@@ -37,9 +51,31 @@
             background-color: #f9f9f9;
             margin-bottom: 20px;
         }
+
+        /* Ladeanimation */
+        #loading {
+            display: none;
+            width: 100px;
+            height: 100px;
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <div id="loading"></div>
+
     <div class="info-box">
         <p>Please note that you need to join our Discord server to use these widgets: <a href="https://discord.gg/VRYSb3sEN3" target="_blank">Join Discord Server</a></p>
     </div>
@@ -50,7 +86,7 @@
         <input type="text" id="discordID" name="discordID" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 20px;"><br>
 
         <label for="language">Select Language:</label><br>
-        <select id="language" name="language" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9; margin-bottom: 20px;" onchange="loadWidgets()">
+        <select id="language" name="language" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9; margin-bottom: 20px;" onchange="handleLanguageChange()">
             <option value="en">English</option>
             <option value="de">Deutsch</option>
             <option value="tr">Türkçe</option>
@@ -64,37 +100,96 @@
 
     <script>
         var isDarkMode = false;
+        var isLoading = true; // Start with true to show loading animation on page load
 
+        // Function to load widgets
         function loadWidgets() {
             var discordID = document.getElementById('discordID').value;
+            if (!discordID) {
+                alert("Please enter a Discord User ID.");
+                return;
+            }
+
+            isLoading = true;
+            updateFormState();
+
             var language = document.getElementById('language').value;
             var widgetsDiv = document.getElementById('widgets');
+            var loadingDiv = document.getElementById('loading');
             var theme = isDarkMode ? '&theme=dark' : '';
             var lang = `&language=${language}`;
-            widgetsDiv.innerHTML = `
-                <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_large${theme}${lang}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
-                </div>
-                <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_small${theme}${lang}" width="150" height="150" allowtransparency="true" frameborder="0"></iframe>
-                </div>
-                <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_mini${theme}${lang}" width="300" height="60" allowtransparency="true" frameborder="0"></iframe>
-                </div>
-                <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=vsc${theme}${lang}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
-                </div>
-                <div>
-                    <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=status${theme}${lang}" width="300" height="100" allowtransparency="true" frameborder="0"></iframe>
-                </div>
-            `;
+
+            // Zeige die Ladeanimation
+            loadingDiv.style.display = 'block';
+            widgetsDiv.style.display = 'none';
+
+            // Simuliere eine kurze Verzögerung zum Laden der Widgets
+            setTimeout(function() {
+                widgetsDiv.innerHTML = `
+                    <div>
+                        <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_large${theme}${lang}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
+                    </div>
+                    <div>
+                        <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_small${theme}${lang}" width="150" height="150" allowtransparency="true" frameborder="0"></iframe>
+                    </div>
+                    <div>
+                        <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=spotify_mini${theme}${lang}" width="300" height="60" allowtransparency="true" frameborder="0"></iframe>
+                    </div>
+                    <div>
+                        <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=vsc${theme}${lang}" width="600" height="150" allowtransparency="true" frameborder="0"></iframe>
+                    </div>
+                    <div>
+                        <iframe src="https://linkgames.de/api/v3/widget/${discordID}?type=status${theme}${lang}" width="300" height="100" allowtransparency="true" frameborder="0"></iframe>
+                    </div>
+                `;
+                // Verstecke die Ladeanimation und zeige die Widgets
+                loadingDiv.style.display = 'none';
+                widgetsDiv.style.display = 'block';
+
+                isLoading = false;
+                updateFormState();
+            }, 2000); // Simulierte Ladezeit von 2 Sekunden
         }
 
+        // Function to toggle theme
         function toggleTheme() {
+            if (isLoading) {
+                return;
+            }
+
             isDarkMode = !isDarkMode;
             var themeButton = document.getElementById('themeButton');
             themeButton.textContent = isDarkMode ? 'Switch to White Mode' : 'Switch to Dark Mode';
             loadWidgets();
+        }
+
+        // Function to handle language change
+        function handleLanguageChange() {
+            if (isLoading) {
+                return;
+            }
+            loadWidgets();
+        }
+
+        // Function to update form state
+        function updateFormState() {
+            document.getElementById('discordID').disabled = isLoading;
+            document.getElementById('language').disabled = isLoading;
+            document.getElementById('loadButton').disabled = isLoading;
+            document.getElementById('themeButton').disabled = isLoading;
+        }
+
+        // Show loading animation on page load
+        window.onload = function() {
+            var loadingDiv = document.getElementById('loading');
+            loadingDiv.style.display = 'block';
+
+            // Simuliere eine kurze Verzögerung zum Laden der Widgets
+            setTimeout(function() {
+                loadingDiv.style.display = 'none';
+                isLoading = false;
+                updateFormState();
+            }, 2000); // Simulierte Ladezeit von 2 Sekunden
         }
     </script>
 </body>
